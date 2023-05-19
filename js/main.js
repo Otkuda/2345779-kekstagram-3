@@ -1,9 +1,9 @@
-import { setUserFormSubmit } from './validate.js';
-import { closeDownloadPicWindow } from './form.js';
-import { getPics } from './get-pics.js';
+import './util.js';
+import './draw.js';
+import './form.js';
+import './validate.js';
+import './scale-editor.js';
+import './effects.js';
+import {getData} from './api.js';
 
-
-getPics();
-
-setUserFormSubmit(closeDownloadPicWindow);
-
+getData();

@@ -1,26 +1,38 @@
+import {renderingThumbnail} from './draw.js';
+import {checkError} from './util.js';
+import {isFail, isSuccess} from './check.js';
+import {closeWindow} from './form.js';
+
+
 const SERVER_URL = 'https://27.javascript.pages.academy/kekstagram-simple';
 
-export const getData = function (onSuccess) {
+export const getData = function () {
   fetch(`${SERVER_URL}/data`)
-    .then((response) => response.json())
-    .then((pictures) => onSuccess(pictures));
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+    })
+    .then((response) => renderingThumbnail(response))
+    .catch(() => checkError('Ошибка подгрузки изображений!'));
 };
 
-export const postData = function (body, onSuccess, onFail, finalAct = () => {}) {
-  fetch(
-    SERVER_URL,
+export const postData = function (evt) {
+  const data = new FormData(evt.target);
+  fetch(SERVER_URL,
     {
       method: 'POST',
-      body,
+      body: data,
     },
-  ).then((response) => {
-    if (response.ok) {
-      onSuccess();
-    } else {
-      onFail();
-    }
-  })
-    .catch(() => onFail())
-    .finally(() => finalAct());
+  )
+    .then((response) => {
+      if (response.ok) {
+        closeWindow(true);
+        isSuccess();
+      } else {
+        closeWindow(false);
+        isFail();
+      }
+    });
 };
 
