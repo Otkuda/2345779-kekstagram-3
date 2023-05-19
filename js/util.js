@@ -1,21 +1,8 @@
-export function getRandomInt(min, max) {
-  return Math.floor(min + Math.random() * (max - min));
-}
+export const checkStr = (str, maxLen) => maxLen >= String(str).length;
 
-export function checkCommentLength(string, requiredLength) {
-  if(string.length <= requiredLength) {
-    return true;
-  } else {
-    return false;
-  }
-}
+export const isESC = (evt) => evt.key === 'Escape';
 
-export function checkStr(str, maxLen) {
-  return maxLen >= String(str).length;
-}
-
-
-export const showAlert = (message) => {
+export const checkError = (message) => {
   const ALERT_SHOW_TIME = 5000;
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';
@@ -26,12 +13,9 @@ export const showAlert = (message) => {
   alertContainer.style.padding = '10px 3px';
   alertContainer.style.fontSize = '30px';
   alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'pink';
-
+  alertContainer.style.backgroundColor = 'red';
   alertContainer.textContent = message;
-
   document.body.append(alertContainer);
-
   setTimeout(() => {
     alertContainer.remove();
   }, ALERT_SHOW_TIME);

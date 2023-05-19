@@ -1,31 +1,17 @@
-import {initForm} from './form.js';
+const container = document.querySelector('.pictures');
+const usersPictureTemplate = document.querySelector('#picture').content;
 
-const pictureTemplate = document.querySelector('#picture').content;
-const pictureExp = pictureTemplate.querySelector('.picture');
-const pictures = document.querySelector('.pictures');
+export const renderingThumbnail = (getObjects) => {
+  const usersPicturesFragment = document.createDocumentFragment();
 
-const createPicture = function (data) {
-  const newPic = pictureExp.cloneNode(true);
+  getObjects.forEach(({url, likes, comments}) => {
+    const pictureElement = usersPictureTemplate.cloneNode(true);
 
-  const newPicImg = newPic.querySelector('.picture__img');
-  newPicImg.src = data.url;
-  const newPicInfo = newPic.querySelector('.picture__info');
-  const newPicComments = newPicInfo.querySelector('.picture__comments');
-  newPicComments.textContent = data.comments;
-  const newPicLikes = newPicInfo.querySelector('.picture__likes');
-  newPicLikes.textContent = data.likes;
+    pictureElement.querySelector('.picture__img').src = url;
+    pictureElement.querySelector('.picture__likes').textContent = likes;
+    pictureElement.querySelector('.picture__comments').textContent = comments;
 
-  return newPic;
+    usersPicturesFragment.appendChild(pictureElement);
+  });
+  container.appendChild(usersPicturesFragment);
 };
-
-export const drawPictures = function (data) {
-  const res = new DocumentFragment();
-  for (let i = 0; i < data.length; i++) {
-    const newPic = createPicture(data[i]);
-    res.append(newPic);
-    pictures.append(res);
-  }
-};
-
-initForm();
-

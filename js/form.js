@@ -1,54 +1,45 @@
-//import { setUserFormSubmit } from './validate.js';
-import { initScaleEditor } from './scale-editor.js';
-import { initEffectController, resetEffectController } from './effect_slider.js';
+import {isESC} from './util.js';
+import {resetEffect} from './effects.js';
 
+const inputPicture = document.querySelector('#upload-file');
+const buttonCancel = document.querySelector('#upload-cancel');
 
-const uploadFileElement = document.querySelector('#upload-file');
-const closeFormElement = document.querySelector('#upload-cancel');
-const hashtagInputElement = document.querySelector('.text__hashtags');
-const commentInputElement = document.querySelector('.text__description');
-
-
-const cleaningForm = () => {
-  uploadFileElement.value = '';
-  hashtagInputElement.value = '';
-  commentInputElement.value = '';
-  resetEffectController();
-};
-
-const openDownloadPicWindow = () => {
+export const openWindow = () => {
   document.querySelector('.img-upload__overlay').classList.remove('hidden');
   document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onFormEscapeKeyDown);
+  document.addEventListener('keydown', closeOnButton);
 };
 
-function closeDownloadPicWindow() {
+inputPicture.addEventListener('change', () => {
+  openWindow();
+});
+
+const cleanForm = () => {
+  inputPicture.value = '';
+  document.querySelector('.text__hashtags').value = '';
+  document.querySelector('.text__description').value = '';
+  resetEffect();
+  document.querySelector('.scale__control--value').value = '100%';
+};
+
+export const closeWindow = (needToClean) => {
   document.querySelector('.img-upload__overlay').classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onFormEscapeKeyDown);
-  cleaningForm();
-}
+  document.removeEventListener('keydown', closeOnButton);
+  if (needToClean) {
+    cleanForm();
+  }
+};
 
-function onFormEscapeKeyDown(evt){
-  if (evt.key === 'Escape') {
+function closeOnButton(evt) {
+  if (isESC(evt)) {
     evt.preventDefault();
-    closeDownloadPicWindow();
+    closeWindow(true);
   }
 }
 
-const initForm = () => {
-
-  uploadFileElement.addEventListener('change', () => {
-    openDownloadPicWindow();
-  });
-
-  closeFormElement.addEventListener('click', () => {
-    closeDownloadPicWindow();
-  });
-};
-
-initScaleEditor();
-initEffectController();
+buttonCancel.addEventListener('click', () => {
+  closeWindow(true);
+});
 
 
-export {initForm, openDownloadPicWindow, closeDownloadPicWindow };
